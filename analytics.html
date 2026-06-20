@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O'KEY Supplier Portal — Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-head">
+      <button class="sb-logo" onclick="toggleSidebar()">OK</button>
+      <div class="sb-text">
+        <span class="sb-text-name">O'KEY</span>
+        <span class="sb-text-sub">Supplier Portal</span>
+      </div>
+      <button class="sb-chevron" onclick="toggleSidebar()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"/></svg>
+      </button>
+    </div>
+    <nav class="sb-nav">
+      <a href="index.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <div class="nav-group">Products</div>
+      <div class="nav-divider"></div>
+      <a href="catalog.html" class="nav-item indent">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+        <span class="nav-label">Catalog</span>
+      </a>
+      <a href="promotions.html" class="nav-item indent">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 21 12 12 21 3 12Z"/><circle cx="8" cy="8" r="1"/></svg></span>
+        <span class="nav-label">Promotions</span>
+      </a>
+      <a href="analytics.html" class="nav-item indent active">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="20" y2="21"/><line x1="7" y1="21" x2="7" y2="13"/><line x1="12" y1="21" x2="12" y2="7"/><line x1="17" y1="21" x2="17" y2="11"/></svg></span>
+        <span class="nav-label">Analytics</span>
+      </a>
+      <a href="abtests.html" class="nav-item indent">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg></span>
+        <span class="nav-label">A/B Tests</span>
+      </a>
+      <a href="documents.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg></span>
+        <span class="nav-label">Documents</span>
+      </a>
+      <a href="orders.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2l1.6 10.5h10.4l1.5-7.5H7"/><circle cx="9" cy="19" r="1.3"/><circle cx="17" cy="19" r="1.3"/></svg></span>
+        <span class="nav-label">Orders</span>
+      </a>
+      <a href="deliveries.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="12" height="9" rx="1"/><path d="M14 10h3.5l2.5 3v3H14z"/><circle cx="6.5" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg></span>
+        <span class="nav-label">Deliveries</span>
+      </a>
+      <a href="stores.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 9 6 4 18 4 20 9"/><line x1="4" y1="9" x2="20" y2="9"/><rect x="5" y="9" width="14" height="11"/></svg></span>
+        <span class="nav-label">Stores</span>
+      </a>
+      <a href="notifications.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 21h4"/></svg></span>
+        <span class="nav-label">Notifications</span>
+        <span class="nav-badge">5</span>
+      </a>
+      <a href="support.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><line x1="5" y1="5" x2="9.5" y2="9.5"/><line x1="19" y1="5" x2="14.5" y2="9.5"/><line x1="5" y1="19" x2="9.5" y2="14.5"/><line x1="19" y1="19" x2="14.5" y2="14.5"/></svg></span>
+        <span class="nav-label">Support</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2"/></svg></span>
+        <span class="nav-label">Company settings</span>
+      </a>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div class="topbar-title">
+        <span class="topbar-bread">Supplier / Products / Analytics</span>
+        <span class="topbar-screen">Analytics</span>
+      </div>
+      <div class="search-wrap">
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5" stroke-linecap="round"/></svg>
+          <input placeholder="Search analytics…">
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" title="Help">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.3 9.2a2.8 2.8 0 0 1 5.3 1.1c0 1.9-2.8 2.4-2.8 4" stroke-linecap="round"/><circle cx="11.8" cy="17.3" r=".7" fill="currentColor" stroke="none"/></svg>
+        </button>
+        <a href="notifications.html" class="icon-btn" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 21h4"/></svg>
+          <span class="notif-pip"></span>
+        </a>
+        <div class="vdiv"></div>
+        <a href="settings.html" class="user-btn">
+          <div class="user-avatar">DC</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-start;">
+            <span class="user-name">Dairy Co.</span>
+            <span class="user-verified">Verified supplier</span>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div style="display:flex;gap:8px;">
+          <button class="sec-btn active">Week</button>
+          <button class="sec-btn">Month</button>
+          <button class="sec-btn">Year</button>
+        </div>
+        <button class="btn btn-outline">Export report</button>
+      </div>
+
+      <div class="kpi-grid" style="margin-bottom:24px;">
+        <div class="kpi-card">
+          <div class="kpi-label">Total revenue</div>
+          <div class="kpi-value">₽11.6M</div>
+          <div class="kpi-delta positive">+18.4% vs last period</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Units sold</div>
+          <div class="kpi-value">48,320</div>
+          <div class="kpi-delta positive">+12.1%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Avg. selling price</div>
+          <div class="kpi-value">₽240</div>
+          <div class="kpi-delta negative">−2.3%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Active SKUs</div>
+          <div class="kpi-value">7</div>
+          <div class="kpi-delta neutral">No change</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:20px;margin-bottom:20px;">
+        <div style="font-weight:600;font-size:14px;margin-bottom:16px;">Revenue trend</div>
+        <svg id="analytics-chart" viewBox="0 0 600 200" style="width:100%;height:200px;overflow:visible">
+          <defs>
+            <linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FF000D" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#FF000D" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <polygon id="a-area" fill="url(#ag)"/>
+          <polyline id="a-line" fill="none" stroke="#FF000D" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          <g id="a-labels" style="font-family:IBM Plex Sans,sans-serif;font-size:10px;fill:#9ca3af"></g>
+        </svg>
+      </div>
+
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Revenue</th>
+              <th>Units</th>
+              <th>Avg. price</th>
+              <th>Share</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Greek Yogurt 450g</td><td>₽4.1M</td><td>17,083</td><td>₽240</td><td>35.3%</td></tr>
+            <tr><td>Milk 3.2% 1L</td><td>₽2.1M</td><td>14,000</td><td>₽150</td><td>18.1%</td></tr>
+            <tr><td>Sour Cream 20% 300g</td><td>₽1.5M</td><td>8,333</td><td>₽180</td><td>12.9%</td></tr>
+            <tr><td>Natural Yogurt 290g</td><td>₽1.8M</td><td>10,000</td><td>₽180</td><td>15.5%</td></tr>
+            <tr><td>Kefir 2.5% 930ml</td><td>₽1.2M</td><td>6,667</td><td>₽180</td><td>10.3%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+<script>
+function toggleSidebar(){const s=document.getElementById('sidebar');s.classList.toggle('collapsed');localStorage.setItem('sb',''+s.classList.contains('collapsed'));}
+if(localStorage.getItem('sb')==='true')document.getElementById('sidebar').classList.add('collapsed');
+
+const chartData={
+  week:{values:[14,18,16,22,20,27,24],labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun']},
+  month:{values:[42,55,49,63,58,72,67,78,73,82],labels:['1','4','7','10','13','16','19','22','25','28']},
+  year:{values:[9.2,9.6,9.1,10.4,10.8,11.6,12.1,12.8,13.4,14.1,13.7,18.4],labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']}
+};
+function buildLine(arr){
+  const w=600,h=200,top=22,bottom=24,n=arr.length;
+  const max=Math.max(...arr),min=Math.min(...arr),range=(max-min)||1;
+  const pts=arr.map((v,i)=>[+(8+i*((w-16)/(n-1))).toFixed(1),+((h-bottom)-((v-min)/range)*(h-top-bottom)).toFixed(1)]);
+  return{line:pts.map(p=>p.join(',')).join(' '),area:'M'+pts[0][0]+','+(h)+' L'+pts.map(p=>p.join(',')).join(' L')+' L'+pts[n-1][0]+','+(h)+' Z',pts,labels:arr};
+}
+function renderChart(key){
+  const d=chartData[key];
+  const r=buildLine(d.values);
+  document.getElementById('a-line').setAttribute('points',r.line);
+  document.getElementById('a-area').setAttribute('points',r.area);
+  const g=document.getElementById('a-labels');
+  g.innerHTML='';
+  r.pts.forEach((p,i)=>{
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',p[0]);t.setAttribute('y',196);t.setAttribute('text-anchor','middle');
+    t.textContent=d.labels[i];g.appendChild(t);
+  });
+}
+renderChart('week');
+document.querySelectorAll('.sec-btn').forEach((b,i)=>{
+  const keys=['week','month','year'];
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.sec-btn').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+    renderChart(keys[i]);
+  });
+});
+</script>
+</body>
+</html>
