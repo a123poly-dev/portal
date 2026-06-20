@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style data-omelette-print-defaults>
+@media print {
+  @page { margin: 0; }
+  body { padding: 0.5in; box-sizing: border-box; }
+  h1, h2, h3, h4, h5, h6 { break-after: avoid; }
+  figure, table, pre, blockquote, img, svg, tr, [class~="card" i] { break-inside: avoid; }
+  img, svg { max-width: 100%; }
+  p { orphans: 3; widows: 3; }
+}
+</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;}
+body{font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1c1c1c;background:#f0f0f0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+:root{--accent:#FF000D;--accent-bg:color-mix(in srgb,var(--accent) 11%,#fff);--rowpad:13px;}
+input,select,textarea,button{font-family:inherit;outline:none;}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);}
+table{border-collapse:collapse;}
+::-webkit-scrollbar{width:11px;height:11px;}
+::-webkit-scrollbar-thumb{background:#d4d4d4;border-radius:6px;border:3px solid transparent;background-clip:padding-box;}
+::-webkit-scrollbar-thumb:hover{background:#bdbdbd;background-clip:padding-box;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</helmet>
+<div style="display:flex;height:100vh;width:100%;overflow:hidden;">
+
+  <aside style="width:{{ sidebarWidth }};flex:none;height:100vh;background:#fff;border-right:1px solid #e8e8e8;display:flex;flex-direction:column;overflow:hidden;transition:width 0.18s ease;">
+    <div style="height:60px;flex:none;display:flex;align-items:center;justify-content:{{ sideJustify }};gap:11px;padding:0 18px;border-bottom:1px solid #f0f0f0;">
+      <button onClick="{{ toggleCollapse }}" title="Toggle menu" style="width: 34px; height: 34px; border: none; border-radius: 9px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; letter-spacing: -0.5px; cursor: pointer; flex: none; background-color: #ff000d">OK</button>
+      <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;line-height:1.15;flex:1;min-width:0;">
+          <span style="font-size:15px;font-weight:700;letter-spacing:-0.2px;">O'KEY</span>
+          <span style="font-size:10px;font-weight:600;color:#9a9a9a;letter-spacing:0.09em;text-transform:uppercase;">Supplier Portal</span>
+        </div>
+        <button onClick="{{ toggleCollapse }}" title="Collapse menu" style="width:26px;height:26px;border:none;background:transparent;border-radius:7px;color:#9a9a9a;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;" style-hover="background:#f6f6f6;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
+        </button>
+      </sc-if>
+    </div>
+    <nav style="flex:1;overflow-y:auto;padding:12px 12px 16px;display:flex;flex-direction:column;gap:1px;">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="12">
+        <sc-if value="{{ item.isGroup }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ item.showLabel }}" hint-placeholder-val="{{ true }}">
+            <div style="font-size:10px;font-weight:700;color:#a8a8a8;letter-spacing:0.1em;text-transform:uppercase;padding:15px 12px 6px;">{{ item.label }}</div>
+          </sc-if>
+          <sc-if value="{{ item.collapsed }}" hint-placeholder-val="{{ false }}">
+            <div style="height:1px;background:#e8e8e8;margin:10px 12px;"></div>
+          </sc-if>
+        </sc-if>
+        <sc-if value="{{ item.isItem }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ item.onClick }}" style="{{ item.style }}" style-hover="background:#f6f6f6;">
+            <span style="display:flex;align-items:center;justify-content:center;width:18px;height:18px;flex:none;">{{ item.icon }}</span>
+            <sc-if value="{{ item.showLabel }}" hint-placeholder-val="{{ true }}">
+              <span style="flex:1;">{{ item.label }}</span>
+            </sc-if>
+            <sc-if value="{{ item.badgeShow }}" hint-placeholder-val="{{ false }}">
+              <span style="background:#d23b3b;color:#fff;font-size:10.5px;font-weight:600;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 5px;">{{ item.badge }}</span>
+            </sc-if>
+          </button>
+        </sc-if>
+      </sc-for>
+    </nav>
+    
+  </aside>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+    <header style="height:60px;flex:none;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;gap:18px;padding:0 26px;z-index:5;">
+      <div style="display:flex;flex-direction:column;line-height:1.15;min-width:150px;">
+        <div style="box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; justify-content: normal; align-items: normal"><span style="font-size:11px;color:#a8a8a8;">Supplier / {{ screenTitle }}</span><span style="font-size:16px;font-weight:600;letter-spacing:-0.2px;">{{ screenTitle }}</span></div>
+        
+      </div>
+      <div style="flex:1;display:flex;justify-content:center;">
+        <div style="position:relative;width:100%;max-width:440px;">
+          <span style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#9a9a9a;display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5" stroke-linecap="round"></line></svg></span>
+          <input placeholder="Search products, SKU, documents, orders…" style="width: 100%; height: 40px; padding: 0 14px 0 38px; border: 1px solid #e4e4e4; border-radius: 8px; background: #f7f7f7; font-size: 13px; color: #1c1c1c">
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex:none;">
+        <button title="Help" style="width: 38px; height: 38px; border: 1px solid #e8e8e8; background: #fff; border-radius: 8px; color: #5c5c5c; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; border-width: 0px" style-hover="background:#f6f6f6;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M9.3 9.2a2.8 2.8 0 0 1 5.3 1.1c0 1.9-2.8 2.4-2.8 4" stroke-linecap="round"></path><circle cx="11.8" cy="17.3" r="0.7" fill="currentColor" stroke="none"></circle></svg></button>
+        <button onClick="{{ goNotifications }}" title="Notifications" style="position: relative; width: 38px; height: 38px; border: 1px solid #e8e8e8; background: #fff; border-radius: 8px; color: #5c5c5c; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; border-width: 0px" style-hover="background:#f6f6f6;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"></path><path d="M10 21h4"></path></svg>
+          <span style="position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:#d23b3b;border:1.5px solid #fff;"></span>
+        </button>
+        <div style="width:1px;height:24px;background:#e8e8e8;margin:0 2px;"></div>
+        <button onClick="{{ goSettings }}" style="display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 6px 0 4px; border: none; background: transparent; border-radius: 8px; cursor: pointer; font-size: 14px" style-hover="background:#f6f6f6;">
+          <span style="width: 30px; height: 30px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; background-color: #ff000d">DC</span>
+          <div style="box-sizing: border-box; display: flex; flex-direction: column; gap: 0px; justify-content: normal; align-items: flex-start"><span style="font-size: 13px; font-weight: 500; color: #3a3a3a; position: static">Dairy Co.</span><div style="font-size: 11px; color: #1f9d57; display: flex; align-items: center; gap: 4px; position: static"><span style="width:6px;height:6px;border-radius:50%;background:#1f9d57;"></span>Verified supplier</div></div>
+        </button>
+      </div>
+    </header>
+
+    <main style="flex:1;overflow-y:auto;padding:26px 28px 44px;">
+
+      <!-- ============ DASHBOARD ============ -->
+      <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+        <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:18px;">
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:14px;">
+            <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="6">
+              <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 15px 16px 14px; display: flex; flex-direction: column; gap: 8px; min-height: 106px">
+                <span style="font-size:11px;font-weight:500;color:#8a8a8a;">{{ k.label }}</span>
+                <span style="font-size:24px;font-weight:700;letter-spacing:-0.6px;color:{{ k.valueColor }};">{{ k.value }}</span>
+                <sc-if value="{{ showDeltas }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-size:11.5px;font-weight:500;color:{{ k.subColor }};">{{ k.sub }}</span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:18px;">
+            <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 22px 16px">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+                <div><div style="font-size:15px;font-weight:600;">Sales dynamics</div><div style="font-size:12px;color:#8a8a8a;margin-top:2px;">Revenue, ₽ millions</div></div>
+                <div style="display:flex;background:#f2f2f2;border-radius:8px;padding:3px;gap:2px;">
+                  <sc-for list="{{ rangeBtns }}" as="r" hint-placeholder-count="3"><button onClick="{{ r.onClick }}" style="{{ r.style }}">{{ r.label }}</button></sc-for>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-end;gap:14px;margin:16px 0 6px;">
+                <span style="font-size:30px;font-weight:700;letter-spacing:-1px;">₽18.4M</span>
+                <span style="font-size:13px;font-weight:600;color:#1f9d57;margin-bottom:7px;">▲ 12.3% vs prev. period</span>
+              </div>
+              <svg viewBox="0 0 600 200" preserveAspectRatio="none" style="width:100%;height:184px;display:block;">
+                <line x1="0" y1="24" x2="600" y2="24" stroke="#f0f0f0" stroke-width="1"></line>
+                <line x1="0" y1="72" x2="600" y2="72" stroke="#f0f0f0" stroke-width="1"></line>
+                <line x1="0" y1="120" x2="600" y2="120" stroke="#f0f0f0" stroke-width="1"></line>
+                <line x1="0" y1="168" x2="600" y2="168" stroke="#f0f0f0" stroke-width="1"></line>
+                <path d="{{ chartArea }}" fill="var(--accent-bg)" stroke="none"></path>
+                <polyline points="{{ chartLine }}" fill="none" stroke="var(--accent)" stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"></polyline>
+              </svg>
+              <div style="display:flex;justify-content:space-between;margin-top:9px;">
+                <sc-for list="{{ chartLabels }}" as="l" hint-placeholder-count="7"><span style="font-size:11px;color:#9a9a9a;">{{ l }}</span></sc-for>
+              </div>
+            </div>
+
+            <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 0 8px">
+              <div style="font-size:15px;font-weight:600;padding:0 22px 12px;">Top products</div>
+              <sc-for list="{{ topProductsDash }}" as="p" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:12px;padding:10px 22px;border-top:1px solid #f2f2f2;">
+                  <div style="width:28px;height:28px;border-radius:7px;background:#f2f2f2;color:#5c5c5c;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex:none;">{{ p.rank }}</div>
+                  <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ p.name }}</div><div style="font-size:11px;color:#8a8a8a;">{{ p.qty }} sold</div></div>
+                  <div style="font-size:13px;font-weight:600;font-family:'IBM Plex Mono',monospace;">{{ p.revenue }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+            <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 22px 14px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-size:15px;font-weight:600;">Active promotions</div><span onClick="{{ goPromotions }}" style="font-size:12px;color:var(--accent);font-weight:500;cursor:pointer;">View all</span></div>
+              <sc-for list="{{ activePromos }}" as="pr" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:13px;padding:11px 0;border-top:1px solid #f2f2f2;">
+                  <div style="padding:5px 11px;border-radius:7px;background:var(--accent-bg);color:var(--accent);font-weight:700;font-size:13px;flex:none;min-width:54px;text-align:center;">{{ pr.deal }}</div>
+                  <div style="flex:1;"><div style="font-size:13px;font-weight:500;">{{ pr.name }}</div><div style="font-size:11px;color:#8a8a8a;">{{ pr.stores }} stores · ends {{ pr.ends }}</div></div>
+                  <span style="font-size:11.5px;font-weight:600;color:#1f9d57;background:#e7f6ee;padding:3px 9px;border-radius:20px;">{{ pr.uplift }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 22px 14px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div style="font-size:15px;font-weight:600;">Recent activity</div><span onClick="{{ goNotifications }}" style="font-size:12px;color:var(--accent);font-weight:500;cursor:pointer;">View all</span></div>
+              <sc-for list="{{ dashNotifs }}" as="n" hint-placeholder-count="4">
+                <div style="display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-top:1px solid #f2f2f2;">
+                  <div style="width:9px;height:9px;border-radius:50%;background:{{ n.color }};margin-top:5px;flex:none;"></div>
+                  <div style="flex:1;"><div style="font-size:13px;font-weight:500;">{{ n.title }}</div><div style="font-size:11px;color:#8a8a8a;">{{ n.time }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ CATALOG ============ -->
+      <sc-if value="{{ isCatalog }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+            <div style="font-size:13px;color:#8a8a8a;"><span style="color:#1c1c1c;font-weight:600;">128</span> products · live in <span style="color:#1c1c1c;font-weight:600;">77</span> stores</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button onClick="{{ openNewCard }}" style="display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 15px; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; background-color: #ff000d"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Add product</button>
+              <button style="height: 38px; padding: 0 15px; background: #fff; color: #3a3a3a; border: 1px solid #dcdcdc; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer" style-hover="background:#f6f6f6;">Import Excel</button>
+              <button style="height: 38px; padding: 0 15px; background: #fff; color: #3a3a3a; border: 1px solid #dcdcdc; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer" style-hover="background:#f6f6f6;">Bulk edit</button>
+              <button style="height: 38px; padding: 0 15px; background: #fff; color: #3a3a3a; border: 1px solid #dcdcdc; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer" style-hover="background:#f6f6f6;">Archive</button>
+            </div>
+          </div>
+
+          <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; overflow: hidden; border-width: 0px; padding-bottom: 16px">
+            <div style="display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid #f0f0f0;flex-wrap:wrap;">
+              <sc-for list="{{ catChips }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}<span style="opacity:0.6;margin-left:6px;">{{ c.count }}</span></button></sc-for>
+              <div style="flex:1;"></div>
+              <div style="position:relative;width:230px;">
+                <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#9a9a9a;display:flex;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5" stroke-linecap="round"></line></svg></span>
+                <input placeholder="Filter by name or SKU" style="width:100%;height:36px;padding:0 12px 0 34px;border:1px solid #e4e4e4;border-radius:8px;background:#f7f7f7;font-size:12.5px;">
+              </div>
+            </div>
+            <table style="width:100%;font-size:13px;">
+              <thead><tr style="text-align:left;color:#8a8a8a;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;">
+                <th style="padding:11px 18px;width:40px;"><input type="checkbox"></th>
+                <th style="padding:11px 12px;">SKU</th>
+                <th style="padding:11px 12px;">Product</th>
+                <th style="padding:11px 12px;">Status</th>
+                <th style="padding:11px 12px;text-align:center;">Stores</th>
+                <th style="padding:11px 12px;text-align:right;">Sales (30d)</th>
+                <th style="padding:11px 18px;width:40px;"></th>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{ filteredProducts }}" as="p" hint-placeholder-count="8">
+                  <tr onClick="{{ p.onClick }}" style="border-top:1px solid #f2f2f2;cursor:pointer;" style-hover="background:#fafafa;">
+                    <td style="padding:var(--rowpad) 18px;" onClick="{{ stop }}"><input type="checkbox"></td>
+                    <td style="padding:var(--rowpad) 12px;font-family:'IBM Plex Mono',monospace;color:#5c5c5c;">{{ p.sku }}</td>
+                    <td style="padding:var(--rowpad) 12px;font-weight:500;">{{ p.name }}</td>
+                    <td style="padding:var(--rowpad) 12px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:{{ p.statusColor }};background:{{ p.statusBg }};padding:3px 10px;border-radius:20px;"><span style="width:6px;height:6px;border-radius:50%;background:{{ p.statusColor }};"></span>{{ p.status }}</span></td>
+                    <td style="padding:var(--rowpad) 12px;text-align:center;color:#3a3a3a;">{{ p.stores }}</td>
+                    <td style="padding:var(--rowpad) 12px;text-align:right;font-family:'IBM Plex Mono',monospace;font-weight:500;">{{ p.sales }}</td>
+                    <td style="padding:var(--rowpad) 18px;color:#a8a8a8;text-align:right;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ PRODUCT CARD ============ -->
+      <sc-if value="{{ isCard }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px;">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            
+            <div style="flex:1;min-width:200px;">
+              <div style="display:flex;align-items:center;gap:11px;"><span style="font-size:20px;font-weight:700;letter-spacing:-0.3px;">{{ cardName }}</span><span style="font-size:12px;font-weight:600;color:{{ cardStatusColor }};background:{{ cardStatusBg }};padding:3px 11px;border-radius:20px;">{{ cardStatus }}</span></div>
+              <div style="font-size:12px;color:#8a8a8a;font-family:'IBM Plex Mono',monospace;margin-top:3px;">SKU {{ cardSku }} · last edited 2 days ago</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button style="height: 38px; padding: 0 15px; background: #fff; color: #3a3a3a; border: 1px solid #dcdcdc; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer" style-hover="background:#f6f6f6;">Cancel</button>
+              <button style="height: 38px; padding: 0 15px; background: #fff; color: var(--accent); border: 1px solid var(--accent); border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer">Send to moderation</button>
+              <button style="height: 38px; padding: 0 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer">Save</button>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:208px 1fr;gap:18px;align-items:start;">
+            <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 8px; position: sticky; top: 0; display: flex; flex-direction: column; gap: 1px; border-width: 0px">
+              <sc-for list="{{ cardNav }}" as="s" hint-placeholder-count="6"><button onClick="{{ s.onClick }}" style="{{ s.style }}" style-hover="background:#f6f6f6;">{{ s.label }}</button></sc-for>
+            </div>
+
+            <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 24px 26px; min-height: 420px; border-width: 0px">
+              <sc-if value="{{ secGeneral }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size:15px;font-weight:600;margin-bottom:18px;">General</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;">
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Product name</label><input value="Greek Yogurt 450g" style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;"></div>
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Brand</label><input value="Dairy Co." style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;"></div>
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Category</label><select style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;background:#fff;"><option>Dairy &amp; eggs</option><option>Beverages</option></select></div>
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Subcategory</label><select style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;background:#fff;"><option>Yogurt</option><option>Milk</option></select></div>
+                  <div style="grid-column:1 / -1;"><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Description</label><textarea style="width:100%;height:96px;padding:10px 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;resize:vertical;">Thick, creamy Greek-style yogurt, 10% protein. Made from whole milk, no added sugar.</textarea></div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ secMedia }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:15px;font-weight:600;margin-bottom:18px;">Media</div>
+                <label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:9px;">Product images</label>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;">
+                  <sc-for list="{{ mediaSlots }}" as="m" hint-placeholder-count="4">
+                    <div style="aspect-ratio:1/1;border-radius:10px;border:1px dashed #cfcfcf;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#9a9a9a;text-align:center;padding:8px;">{{ m }}</div>
+                  </sc-for>
+                </div>
+                <label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:9px;">Packaging photos &amp; video</label>
+                <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;">
+                  <div style="height:120px;border-radius:10px;border:1px dashed #cfcfcf;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9a9a9a;">packaging shot</div>
+                  <div style="height:120px;border-radius:10px;border:1px dashed #cfcfcf;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9a9a9a;">product video</div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ secLogistics }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:15px;font-weight:600;margin-bottom:18px;">Logistics</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;">
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Net weight</label><input value="450 g" style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;"></div>
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Dimensions (mm)</label><input value="95 × 95 × 110" style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;"></div>
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Shelf life</label><input value="21 days" style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;"></div>
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Temperature mode</label><input value="+2 … +6 °C" style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;"></div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ secRegulatory }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:15px;font-weight:600;margin-bottom:18px;">Regulatory</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;margin-bottom:20px;">
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Barcode (EAN-13)</label><input value="4607012345678" style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;font-family:'IBM Plex Mono',monospace;"></div>
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">GTIN</label><input value="04607012345678" style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;font-family:'IBM Plex Mono',monospace;"></div>
+                </div>
+                <label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:9px;">Certificates &amp; declarations</label>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:11px;padding:11px 14px;border:1px solid #e8e8e8;border-radius:9px;"><span style="font-size:10px;font-weight:700;color:#fff;background:#1f9d57;padding:3px 6px;border-radius:4px;">PDF</span><span style="flex:1;font-size:13px;font-weight:500;">EAC declaration EAC-2241</span><span style="font-size:11.5px;color:#1f9d57;font-weight:500;">Valid · exp. 14 Mar 2027</span></div>
+                  <div style="display:flex;align-items:center;gap:11px;padding:11px 14px;border:1px solid #e8e8e8;border-radius:9px;"><span style="font-size:10px;font-weight:700;color:#fff;background:#1f9d57;padding:3px 6px;border-radius:4px;">PDF</span><span style="flex:1;font-size:13px;font-weight:500;">Quality certificate QC-0098</span><span style="font-size:11.5px;color:#1f9d57;font-weight:500;">Valid</span></div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ secPricing }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:15px;font-weight:600;margin-bottom:18px;">Pricing</div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Purchase price</label><input value="₽ 78.40" style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;font-family:'IBM Plex Mono',monospace;"></div>
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Promo price</label><input value="₽ 69.90" style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;font-family:'IBM Plex Mono',monospace;"></div>
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:7px;">Recommended retail</label><input value="₽ 109.00" style="width:100%;height:40px;padding:0 12px;border:1px solid #dcdcdc;border-radius:8px;font-size:13.5px;font-family:'IBM Plex Mono',monospace;"></div>
+                </div>
+                <div style="margin-top:18px;padding:13px 16px;background:var(--accent-bg);border-radius:9px;font-size:12.5px;color:#3a3a3a;">Suggested margin <strong>28.1%</strong> — within O'KEY dairy category target (24–32%).</div>
+              </sc-if>
+              <sc-if value="{{ secAvailability }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:15px;font-weight:600;margin-bottom:18px;">Availability</div>
+                <label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:9px;">Regions</label>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;">
+                  <sc-for list="{{ regionChips }}" as="r" hint-placeholder-count="5"><span style="font-size:12.5px;font-weight:500;color:var(--accent);background:var(--accent-bg);padding:6px 12px;border-radius:20px;">{{ r }}</span></sc-for>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:9px;">Distribution centers</label><div style="display:flex;flex-direction:column;gap:8px;"><div style="padding:10px 14px;border:1px solid #e8e8e8;border-radius:9px;font-size:13px;">DC Moscow-North</div><div style="padding:10px 14px;border:1px solid #e8e8e8;border-radius:9px;font-size:13px;">DC Saint Petersburg</div><div style="padding:10px 14px;border:1px solid #e8e8e8;border-radius:9px;font-size:13px;">DC Krasnodar</div></div></div>
+                  <div><label style="display:block;font-size:12px;font-weight:500;color:#5c5c5c;margin-bottom:9px;">Stores</label><div style="padding:20px;border:1px solid #e8e8e8;border-radius:9px;text-align:center;"><div style="font-size:30px;font-weight:700;letter-spacing:-1px;">77</div><div style="font-size:12px;color:#8a8a8a;margin-top:2px;">of 92 O'KEY stores carry this SKU</div></div></div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ DOCUMENTS ============ -->
+      <sc-if value="{{ isDocuments }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;gap:4px;border-bottom:1px solid #e8e8e8;flex-wrap:wrap;">
+            <sc-for list="{{ docTabs }}" as="t" hint-placeholder-count="7"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:11px;padding:13px 16px;background:var(--accent-bg);border-radius:10px;">
+            <span style="display:flex;color:var(--accent);margin-top:1px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16" stroke-linecap="round"></line><circle cx="12" cy="8" r="0.7" fill="currentColor" stroke="none"></circle></svg></span>
+            <div style="font-size:12.5px;color:#3a3a3a;line-height:1.5;">EDI exchange with O'KEY is active. Supported message types: <strong>ORDERS</strong>, <strong>ORDRSP</strong>, <strong>DESADV</strong>, <strong>RECADV</strong> and electronic <b>UPD</b>. Documents sync automatically every 15 minutes.</div>
+          </div>
+
+          <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; overflow: hidden; border-width: 0px">
+            <table style="width:100%;font-size:13px;">
+              <thead><tr style="text-align:left;color:#8a8a8a;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;">
+                <th style="padding:11px 18px;">Document</th>
+                <th style="padding:11px 12px;">Type</th>
+                <th style="padding:11px 12px;">Status</th>
+                <th style="padding:11px 12px;">Date</th>
+                <th style="padding:11px 18px;text-align:right;"></th>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{ filteredDocs }}" as="d" hint-placeholder-count="6">
+                  <tr style="border-top:1px solid #f2f2f2;" style-hover="background:#fafafa;">
+                    <td style="padding:var(--rowpad) 18px;"><div style="display:flex;align-items:center;gap:11px;"><span style="font-size:9.5px;font-weight:700;color:#fff;background:{{ d.tagColor }};padding:3px 6px;border-radius:4px;">{{ d.tag }}</span><span style="font-weight:500;">{{ d.name }}</span></div></td>
+                    <td style="padding:var(--rowpad) 12px;color:#5c5c5c;">{{ d.type }}</td>
+                    <td style="padding:var(--rowpad) 12px;"><span style="font-size:12px;font-weight:600;color:{{ d.statusColor }};background:{{ d.statusBg }};padding:3px 10px;border-radius:20px;">{{ d.status }}</span></td>
+                    <td style="padding:var(--rowpad) 12px;color:#5c5c5c;">{{ d.date }}</td>
+                    <td style="padding:var(--rowpad) 18px;text-align:right;"><button style="height:30px;padding:0 12px;background:#fff;border:1px solid #dcdcdc;border-radius:7px;font-size:12px;font-weight:500;color:#3a3a3a;cursor:pointer;" style-hover="background:#f6f6f6;">Download</button></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <sc-if value="{{ docsEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:54px;text-align:center;color:#9a9a9a;font-size:13px;">No documents in this category.</div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ ANALYTICS ============ -->
+      <sc-if value="{{ isAnalytics }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:18px;">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+            <sc-for list="{{ analyticsMetrics }}" as="m" hint-placeholder-count="3">
+              <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 18px 20px; border-width: 0px">
+                <div style="font-size:12px;color:#8a8a8a;">{{ m.label }}</div>
+                <div style="font-size:28px;font-weight:700;letter-spacing:-0.8px;margin:8px 0 4px;">{{ m.value }}</div>
+                <div style="font-size:12px;font-weight:600;color:#1f9d57;">{{ m.delta }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:18px;">
+            <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 22px 16px; border-width: 0px">
+              <div style="font-size:15px;font-weight:600;margin-bottom:4px;">Revenue by month</div>
+              <div style="font-size:12px;color:#8a8a8a;margin-bottom:20px;">₽ millions · last 12 months</div>
+              <div style="display:flex;align-items:flex-end;gap:7px;height:180px;">
+                <sc-for list="{{ analyticsBars }}" as="b" hint-placeholder-count="12">
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;max-width:34px;height:{{ b.h }};background:{{ b.fill }};border-radius:5px 5px 0 0;"></div>
+                    <span style="font-size:10px;color:#9a9a9a;">{{ b.label }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 22px; border-width: 0px">
+              <div style="font-size:15px;font-weight:600;margin-bottom:14px;">Shelf availability</div>
+              <div style="display:flex;align-items:center;justify-content:center;position:relative;margin:6px 0 14px;">
+                <svg width="172" height="172" viewBox="0 0 180 180">
+                  <circle cx="90" cy="90" r="64" fill="none" stroke="#f0f0f0" stroke-width="20"></circle>
+                  <circle cx="90" cy="90" r="64" fill="none" stroke="#1f9d57" stroke-width="20" stroke-dasharray="369.9 402.1" stroke-linecap="butt" transform="rotate(-90 90 90)"></circle>
+                  <circle cx="90" cy="90" r="64" fill="none" stroke="#c77d11" stroke-width="20" stroke-dasharray="20.1 402.1" stroke-linecap="butt" transform="rotate(241.2 90 90)"></circle>
+                  <circle cx="90" cy="90" r="64" fill="none" stroke="#d23b3b" stroke-width="20" stroke-dasharray="12.1 402.1" stroke-linecap="butt" transform="rotate(259.2 90 90)"></circle>
+                </svg>
+                <div style="position:absolute;text-align:center;"><div style="font-size:26px;font-weight:700;letter-spacing:-0.8px;">92%</div><div style="font-size:11px;color:#8a8a8a;">in stock</div></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:9px;">
+                <div style="display:flex;align-items:center;gap:9px;font-size:12.5px;"><span style="width:9px;height:9px;border-radius:2px;background:#1f9d57;"></span><span style="flex:1;color:#3a3a3a;">In stock</span><strong>92%</strong></div>
+                <div style="display:flex;align-items:center;gap:9px;font-size:12.5px;"><span style="width:9px;height:9px;border-radius:2px;background:#c77d11;"></span><span style="flex:1;color:#3a3a3a;">Low stock</span><strong>5%</strong></div>
+                <div style="display:flex;align-items:center;gap:9px;font-size:12.5px;"><span style="width:9px;height:9px;border-radius:2px;background:#d23b3b;"></span><span style="flex:1;color:#3a3a3a;">Out of stock</span><strong>3%</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+            <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 22px; border-width: 0px">
+              <div style="font-size:15px;font-weight:600;margin-bottom:4px;">Store coverage by region</div>
+              <div style="font-size:12px;color:#8a8a8a;margin-bottom:18px;">Share of O'KEY stores carrying your assortment</div>
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <sc-for list="{{ regions }}" as="r" hint-placeholder-count="5">
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px;"><span style="color:#3a3a3a;font-weight:500;">{{ r.name }}</span><span style="font-family:'IBM Plex Mono',monospace;color:#5c5c5c;">{{ r.pct }}%</span></div>
+                    <div style="height:8px;background:#f2f2f2;border-radius:5px;overflow:hidden;"><div style="height:100%;width:{{ r.pct }}%;background:var(--accent);border-radius:5px;"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 22px; border-width: 0px">
+              <div style="font-size:15px;font-weight:600;margin-bottom:14px;">Promo efficiency</div>
+              <table style="width:100%;font-size:13px;">
+                <thead><tr style="text-align:left;color:#8a8a8a;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;"><th style="padding:8px 0;">Mechanic</th><th style="padding:8px 0;">Period</th><th style="padding:8px 0;text-align:right;">Sales uplift</th></tr></thead>
+                <tbody>
+                  <sc-for list="{{ promoEff }}" as="p" hint-placeholder-count="4">
+                    <tr style="border-top:1px solid #f2f2f2;">
+                      <td style="padding:12px 0;"><span style="font-weight:600;color:var(--accent);background:var(--accent-bg);padding:3px 10px;border-radius:7px;">{{ p.deal }}</span></td>
+                      <td style="padding:12px 0;color:#5c5c5c;">{{ p.period }}</td>
+                      <td style="padding:12px 0;text-align:right;font-weight:700;color:#1f9d57;font-family:'IBM Plex Mono',monospace;">{{ p.uplift }}</td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ A/B TESTS ============ -->
+      <sc-if value="{{ isAbtests }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:18px;">
+          <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 24px; border-width: 0px">
+            <div style="font-size:13px;font-weight:600;color:#8a8a8a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px;">How experiments run</div>
+            <div style="display:flex;align-items:flex-start;gap:0;">
+              <sc-for list="{{ abFlow }}" as="f" hint-placeholder-count="4">
+                <div style="flex:1;display:flex;align-items:flex-start;">
+                  <div style="display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;padding:0 8px;">
+                    <div style="width:34px;height:34px;border-radius:50%;background:{{ f.dot }};color:{{ f.dotText }};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">{{ f.n }}</div>
+                    <div style="font-size:13px;font-weight:600;margin-top:11px;">{{ f.title }}</div>
+                    <div style="font-size:11.5px;color:#8a8a8a;margin-top:4px;line-height:1.45;">{{ f.desc }}</div>
+                  </div>
+                  <sc-if value="{{ f.connector }}" hint-placeholder-val="{{ true }}"><div style="height:2px;background:#e8e8e8;flex:none;width:24px;margin-top:16px;"></div></sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; overflow: hidden; border-width: 0px; padding-bottom: 16px">
+            <div style="font-size:15px;font-weight:600;padding:18px 22px 4px;">Experiments</div>
+            <table style="width:100%;font-size:13px;">
+              <thead><tr style="text-align:left;color:#8a8a8a;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;"><th style="padding:11px 22px;">Experiment</th><th style="padding:11px 12px;">Type</th><th style="padding:11px 12px;">Status</th><th style="padding:11px 22px;text-align:right;">Timeline</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ abTests }}" as="t" hint-placeholder-count="4">
+                  <tr style="border-top:1px solid #f2f2f2;" style-hover="background:#fafafa;">
+                    <td style="padding:var(--rowpad) 22px;font-weight:500;">{{ t.name }}</td>
+                    <td style="padding:var(--rowpad) 12px;color:#5c5c5c;">{{ t.type }}</td>
+                    <td style="padding:var(--rowpad) 12px;"><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:{{ t.color }};background:{{ t.bg }};padding:3px 10px;border-radius:20px;"><span style="width:6px;height:6px;border-radius:50%;background:{{ t.color }};"></span>{{ t.status }}</span></td>
+                    <td style="padding:var(--rowpad) 22px;text-align:right;color:#5c5c5c;">{{ t.timeline }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 22px 24px; border-width: 0px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+              <div><div style="font-size:15px;font-weight:600;">Promo badge color · main product image</div><div style="font-size:12px;color:#8a8a8a;margin-top:2px;">Running · 14,820 sessions · 4 days left</div></div>
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#5c5c5c;background:#f2f2f2;padding:4px 12px;border-radius:20px;"><span style="width:6px;height:6px;border-radius:50%;background:#5c5c5c;"></span>Running</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+              <div style="border:1px solid #e8e8e8;border-radius:11px;padding:18px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><span style="font-size:13px;font-weight:600;">Variant A</span><span style="font-size:11px;font-weight:600;color:#8a8a8a;background:#f2f2f2;padding:3px 9px;border-radius:6px;">Control</span></div>
+                <div style="position:relative;height:150px;border-radius:9px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9a9a9a;margin-bottom:16px;"><span style="position:absolute;top:12px;left:12px;background:#5c5c5c;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;">−20%</span>product shot</div>
+                <div style="display:flex;gap:18px;"><div style="flex:1;"><div style="font-size:11px;color:#8a8a8a;">CTR</div><div style="font-size:22px;font-weight:700;letter-spacing:-0.5px;">3.4%</div></div><div style="flex:1;"><div style="font-size:11px;color:#8a8a8a;">Conversion</div><div style="font-size:22px;font-weight:700;letter-spacing:-0.5px;">7.1%</div></div></div>
+              </div>
+              <div style="border:2px solid #1f9d57;border-radius:11px;padding:18px;position:relative;">
+                <div style="position:absolute;top:-11px;right:16px;background:#1f9d57;color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;">WINNER</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><span style="font-size:13px;font-weight:600;">Variant B</span><span style="font-size:11px;font-weight:600;color:#8a8a8a;background:#f2f2f2;padding:3px 9px;border-radius:6px;">Treatment</span></div>
+                <div style="position:relative;height:150px;border-radius:9px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9a9a9a;margin-bottom:16px;"><span style="position:absolute;top:12px;left:12px;background:#d23b3b;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;">−20%</span>product shot</div>
+                <div style="display:flex;gap:18px;"><div style="flex:1;"><div style="font-size:11px;color:#8a8a8a;">CTR</div><div style="font-size:22px;font-weight:700;letter-spacing:-0.5px;color:#1f9d57;">4.2%</div></div><div style="flex:1;"><div style="font-size:11px;color:#8a8a8a;">Conversion</div><div style="font-size:22px;font-weight:700;letter-spacing:-0.5px;color:#1f9d57;">8.0%</div></div></div>
+              </div>
+            </div>
+            <div style="margin-top:16px;padding:13px 16px;background:#e7f6ee;border-radius:9px;font-size:12.5px;color:#176a3e;">Red badge (Variant B) lifts conversion <strong>+12.7%</strong> at 96% confidence. Awaiting O'KEY category manager approval to roll out to all stores.</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ ORDERS ============ -->
+      <sc-if value="{{ isOrders }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:18px;">
+          <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 24px 26px; border-width: 0px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+              <div>
+                <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:20px;font-weight:700;letter-spacing:-0.3px;font-family:'IBM Plex Mono',monospace;">Order #32514810887</span><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#1f9d57;background:#e7f6ee;padding:4px 12px;border-radius:20px;"><span style="width:7px;height:7px;border-radius:50%;background:#1f9d57;"></span>Accepted</span></div>
+                <div style="font-size:12.5px;color:#8a8a8a;margin-top:5px;">Received 09 May 2026, 11:42 · DC Moscow-North</div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button style="height: 38px; padding: 0 15px; background: #fff; color: #3a3a3a; border: 1px solid #dcdcdc; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer" style-hover="background:#f6f6f6;">Print</button>
+                <button style="height: 38px; padding: 0 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer">Confirm shipment</button>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:22px 0 8px;">
+              <div style="background: #f7f7f7; border-radius: 8px; padding: 14px 16px"><div style="font-size:11px;color:#8a8a8a;">Distribution center</div><div style="font-size:14px;font-weight:600;margin-top:5px;">DC Moscow-North</div></div>
+              <div style="background: #f7f7f7; border-radius: 8px; padding: 14px 16px"><div style="font-size:11px;color:#8a8a8a;">Delivery date</div><div style="font-size:14px;font-weight:600;margin-top:5px;">14 May 2026</div></div>
+              <div style="background: #f7f7f7; border-radius: 8px; padding: 14px 16px"><div style="font-size:11px;color:#8a8a8a;">Amount</div><div style="font-size:14px;font-weight:600;margin-top:5px;font-family:'IBM Plex Mono',monospace;">₽ 1,243,800</div></div>
+              <div style="background: #f7f7f7; border-radius: 8px; padding: 14px 16px"><div style="font-size:11px;color:#8a8a8a;">Quantity</div><div style="font-size:14px;font-weight:600;margin-top:5px;">8,420 units</div></div>
+            </div>
+
+            <div style="margin-top:24px;font-size:13px;font-weight:600;color:#8a8a8a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:18px;">Timeline</div>
+            <div style="display:flex;align-items:flex-start;">
+              <sc-for list="{{ orderTimeline }}" as="s" hint-placeholder-count="5">
+                <div style="flex:1;display:flex;align-items:flex-start;">
+                  <div style="display:flex;flex-direction:column;align-items:flex-start;width:100%;">
+                    <div style="display:flex;align-items:center;width:100%;">
+                      <div style="width:18px;height:18px;border-radius:50%;background:{{ s.dot }};border:{{ s.border }};flex:none;display:flex;align-items:center;justify-content:center;"><span style="width:6px;height:6px;border-radius:50%;background:{{ s.inner }};"></span></div>
+                      <sc-if value="{{ s.connector }}" hint-placeholder-val="{{ true }}"><div style="flex:1;height:2px;background:{{ s.line }};"></div></sc-if>
+                    </div>
+                    <div style="font-size:13px;font-weight:{{ s.weight }};color:{{ s.textColor }};margin-top:11px;">{{ s.label }}</div>
+                    <div style="font-size:11px;color:#9a9a9a;margin-top:3px;">{{ s.time }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; overflow: hidden; border-width: 0px; padding-bottom: 16px">
+            <div style="font-size:15px;font-weight:600;padding:18px 22px 4px;">Recent orders</div>
+            <table style="width:100%;font-size:13px;">
+              <thead><tr style="text-align:left;color:#8a8a8a;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;"><th style="padding:11px 22px;">Order</th><th style="padding:11px 12px;">Distribution center</th><th style="padding:11px 12px;">Date</th><th style="padding:11px 12px;text-align:right;">Amount</th><th style="padding:11px 22px;">Status</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ ordersList }}" as="o" hint-placeholder-count="5">
+                  <tr style="border-top:1px solid #f2f2f2;" style-hover="background:#fafafa;">
+                    <td style="padding:var(--rowpad) 22px;font-family:'IBM Plex Mono',monospace;font-weight:500;">{{ o.id }}</td>
+                    <td style="padding:var(--rowpad) 12px;color:#3a3a3a;">{{ o.dc }}</td>
+                    <td style="padding:var(--rowpad) 12px;color:#5c5c5c;">{{ o.date }}</td>
+                    <td style="padding:var(--rowpad) 12px;text-align:right;font-family:'IBM Plex Mono',monospace;font-weight:500;">{{ o.amount }}</td>
+                    <td style="padding:var(--rowpad) 22px;"><span style="font-size:12px;font-weight:600;color:{{ o.color }};background:{{ o.bg }};padding:3px 10px;border-radius:20px;">{{ o.status }}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ NOTIFICATIONS ============ -->
+      <sc-if value="{{ isNotifications }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <sc-for list="{{ notifChips }}" as="c" hint-placeholder-count="5"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+          </div>
+          <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; overflow: hidden; border-width: 0px">
+            <sc-for list="{{ filteredNotifs }}" as="n" hint-placeholder-count="6">
+              <div style="display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; border-top: 1px solid #f2f2f2; background: {{ n.Bg }}" style-hover="background:#fafafa;">
+                <div style="width:34px;height:34px;border-radius:9px;background:{{ n.bg }};color:{{ n.color }};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex:none;">{{ n.glyph }}</div>
+                <div style="flex:1;min-width:0;">
+                  <div style="display:flex;align-items:center;gap:9px;"><span style="font-size:13.5px;font-weight:600;">{{ n.title }}</span><sc-if value="{{ n.unread }}" hint-placeholder-val="{{ false }}"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent);"></span></sc-if></div>
+                  <div style="font-size:12.5px;color:#5c5c5c;margin-top:3px;line-height:1.45;">{{ n.desc }}</div>
+                </div>
+                <span style="font-size:11.5px;color:#9a9a9a;flex:none;">{{ n.time }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ PLACEHOLDER SECTIONS ============ -->
+      <sc-if value="{{ isPlaceholder }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1320px;margin:0 auto;">
+          <div style="background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 64px 40px; display: flex; flex-direction: column; align-items: center; text-align: center; border-width: 0px">
+            <div style="width:56px;height:56px;border-radius:14px;background:var(--accent-bg);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">{{ placeholderIcon }}</div>
+            <div style="font-size:18px;font-weight:700;letter-spacing:-0.3px;">{{ screenTitle }}</div>
+            <div style="font-size:13.5px;color:#8a8a8a;margin-top:8px;max-width:380px;line-height:1.5;">{{ placeholderDesc }}</div>
+          </div>
+        </div>
+      </sc-if>
+
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:960},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#5c5c5c&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#5c5c5c&quot;,&quot;#0e6e8c&quot;,&quot;#13866a&quot;,&quot;#5b46c9&quot;,&quot;#1a2a4a&quot;]},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Compact&quot;,&quot;options&quot;:[&quot;Comfortable&quot;,&quot;Compact&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;showKpiDeltas&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.state = { screen:'dashboard', salesRange:'month', catFilter:'All', docTab:'All', cardSection:'general', notifFilter:'All', cardName:'Greek Yogurt 450g', cardSku:'12345', collapsed:false };
+  }
+  componentDidMount(){ this.applyTheme(); }
+  componentDidUpdate(){ this.applyTheme(); }
+  applyTheme(){
+    try{
+      const r = document.documentElement;
+      if(this.props.accentColor) r.style.setProperty('--accent', this.props.accentColor);
+      r.style.setProperty('--rowpad', this.props.density === 'Compact' ? '8px' : '13px');
+    }catch(e){}
+  }
+
+  icon(name){
+    const R = React.createElement;
+    const wrap = (ch)=>R('svg',{width:18,height:18,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.7,strokeLinecap:'round',strokeLinejoin:'round'},ch);
+    const rect=(k,x,y,w,h,r)=>R('rect',{key:k,x:x,y:y,width:w,height:h,rx:r||0});
+    const line=(k,x1,y1,x2,y2)=>R('line',{key:k,x1:x1,y1:y1,x2:x2,y2:y2});
+    const circ=(k,cx,cy,r)=>R('circle',{key:k,cx:cx,cy:cy,r:r});
+    const path=(k,d)=>R('path',{key:k,d:d});
+    const poly=(k,p)=>R('polyline',{key:k,points:p});
+    switch(name){
+      case 'dashboard': return wrap([rect(1,3,3,7,7,1.5),rect(2,14,3,7,7,1.5),rect(3,14,14,7,7,1.5),rect(4,3,14,7,7,1.5)]);
+      case 'catalog': return wrap([rect(1,3,4,18,16,2),line(2,3,10,21,10)]);
+      case 'promo': return wrap([path(1,'M12 3 21 12 12 21 3 12Z'),circ(2,8,8,1)]);
+      case 'analytics': return wrap([line(1,4,21,20,21),line(2,7,21,7,13),line(3,12,21,12,7),line(4,17,21,17,11)]);
+      case 'abtest': return wrap([circ(1,9,12,5),circ(2,15,12,5)]);
+      case 'documents': return wrap([rect(1,5,3,14,18,2),line(2,8,8,16,8),line(3,8,12,16,12),line(4,8,16,13,16)]);
+      case 'orders': return wrap([path(1,'M4 5h2l1.6 10.5h10.4l1.5-7.5H7'),circ(2,9,19,1.3),circ(3,17,19,1.3)]);
+      case 'deliveries': return wrap([rect(1,2,7,12,9,1),path(2,'M14 10h3.5l2.5 3v3H14z'),circ(3,6.5,18,1.6),circ(4,17,18,1.6)]);
+      case 'stores': return wrap([poly(1,'4 9 6 4 18 4 20 9'),line(2,4,9,20,9),rect(3,5,9,14,11,0)]);
+      case 'notifications': return wrap([path(1,'M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6'),path(2,'M10 21h4')]);
+      case 'support': return wrap([circ(1,12,12,9),circ(2,12,12,3.2),line(3,5,5,9.5,9.5),line(4,19,5,14.5,9.5),line(5,5,19,9.5,14.5),line(6,19,19,14.5,14.5)]);
+      case 'settings': return wrap([line(1,4,8,20,8),circ(2,9,8,2),line(3,4,16,20,16),circ(4,15,16,2)]);
+      default: return wrap([circ(1,12,12,8)]);
+    }
+  }
+
+  buildLine(arr){
+    const w=600,h=200,top=22,bottom=24;
+    const n=arr.length, max=Math.max.apply(null,arr), min=Math.min.apply(null,arr), range=(max-min)||1;
+    const pts=arr.map((v,i)=>{ const x=8+i*((w-16)/(n-1)); const y=(h-bottom)-((v-min)/range)*(h-top-bottom); return [x,y]; });
+    const line=pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+    const area='M'+pts[0][0].toFixed(1)+','+h+' L'+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L')+' L'+pts[n-1][0].toFixed(1)+','+h+' Z';
+    return { line:line, area:area };
+  }
+
+  renderVals(){
+    const st = this.state;
+    const set = (k)=>()=>this.setState({ screen:k });
+    const accent = this.props.accentColor || '#FF000D';
+
+    // ---- NAV ----
+    const activeMap = { productcard:'catalog' };
+    const activeKey = activeMap[st.screen] || st.screen;
+    const navDefs = [
+      {key:'dashboard',label:'Dashboard',iconKey:'dashboard'},
+      {group:'Products'},
+      {key:'catalog',label:'Catalog',iconKey:'catalog',indent:true},
+      {key:'promotions',label:'Promotions',iconKey:'promo',indent:true},
+      {key:'analytics',label:'Analytics',iconKey:'analytics',indent:true},
+      {key:'abtests',label:'A/B Tests',iconKey:'abtest',indent:true},
+      {key:'documents',label:'Documents',iconKey:'documents'},
+      {key:'orders',label:'Orders',iconKey:'orders'},
+      {key:'deliveries',label:'Deliveries',iconKey:'deliveries'},
+      {key:'stores',label:'Stores',iconKey:'stores'},
+      {key:'notifications',label:'Notifications',iconKey:'notifications',badge:5},
+      {key:'support',label:'Support',iconKey:'support'},
+      {key:'settings',label:'Company settings',iconKey:'settings'}
+    ];
+    const collapsed = st.collapsed;
+    const navItems = navDefs.map((n,i)=>{
+      if(n.group) return { isGroup:true, isItem:false, label:n.group, showLabel:!collapsed, collapsed:collapsed };
+      const active = n.key===activeKey;
+      const bg = active?'var(--accent-bg)':'transparent';
+      const col = active?'var(--accent)':'#4a4a4a';
+      const fw = active?'600':'500';
+      const style = collapsed
+        ? 'display:flex;align-items:center;justify-content:center;width:100%;border:none;background:'+bg+';color:'+col+';padding:11px 0;border-radius:8px;cursor:pointer;'
+        : 'display:flex;align-items:center;gap:11px;width:100%;border:none;background:'+bg+';color:'+col+';font-size:13.5px;font-weight:'+fw+';padding:9px 12px 9px '+(n.indent?'34px':'12px')+';border-radius:8px;cursor:pointer;text-align:left;';
+      return { isGroup:false, isItem:true, label:n.label, icon:this.icon(n.iconKey), style:style, badge:n.badge||null, badgeShow:(!collapsed&&!!n.badge), showLabel:!collapsed, collapsed:collapsed, onClick:set(n.key) };
+    });
+
+    const titles = { dashboard:'Dashboard', catalog:'Catalog', productcard:'Product card', promotions:'Promotions', analytics:'Analytics', abtests:'A/B Tests', documents:'Documents', orders:'Orders', deliveries:'Deliveries', stores:'Stores', notifications:'Notifications', support:'Support', settings:'Company settings' };
+
+    // ---- KPIs ----
+    const green='#1f9d57', amber='#c77d11', red='#d23b3b', ink='#1c1c1c', mut='#8a8a8a';
+    const kpis = [
+      {label:'Products in assortment', value:'128', valueColor:ink, sub:'+4 this month', subColor:green},
+      {label:'Stores represented', value:'77', valueColor:ink, sub:'of 92 O\u2019KEY stores', subColor:mut},
+      {label:'Sales last 30 days', value:'\u20BD18.4M', valueColor:ink, sub:'+12.3% vs prev', subColor:green},
+      {label:'Out of stock', value:'6 SKUs', valueColor:red, sub:'needs attention', subColor:red},
+      {label:'Active promotions', value:'3', valueColor:ink, sub:'2 ending soon', subColor:amber},
+      {label:'New documents', value:'12', valueColor:ink, sub:'4 need signature', subColor:amber}
+    ];
+
+    // ---- Sales chart ----
+    const series = {
+      week:[14,18,16,22,20,27,24],
+      month:[42,55,49,63,58,72,67,78,73,82],
+      year:[9.2,9.6,9.1,10.4,10.8,11.6,12.1,12.8,13.4,14.1,13.7,18.4]
+    };
+    const labelSets = {
+      week:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      month:['1','4','7','10','13','16','19','22','25','28'],
+      year:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    };
+    const chart = this.buildLine(series[st.salesRange]);
+    const setRange = (k)=>()=>this.setState({ salesRange:k });
+    const rangeBtns = ['week','month','year'].map(k=>{
+      const a = st.salesRange===k;
+      return { label:k.charAt(0).toUpperCase()+k.slice(1), onClick:setRange(k),
+        style:'border:none;background:'+(a?'#fff':'transparent')+';color:'+(a?'var(--accent)':'#8a8a8a')+';font-size:12px;font-weight:'+(a?'600':'500')+';padding:6px 13px;border-radius:6px;cursor:pointer;'+(a?'box-shadow:0 1px 2px rgba(0,0,0,0.08);':'') };
+    });
+
+    const topProductsDash = [
+      {rank:1,name:'Milk 3.2% 1L',qty:'18k',revenue:'\u20BD2.1M'},
+      {rank:2,name:'Greek Yogurt 450g',qty:'13k',revenue:'\u20BD1.8M'},
+      {rank:3,name:'Natural Yogurt 290g',qty:'11k',revenue:'\u20BD1.4M'},
+      {rank:4,name:'Kefir 2.5% 930ml',qty:'9.4k',revenue:'\u20BD1.2M'},
+      {rank:5,name:'Butter 82.5% 180g',qty:'5.1k',revenue:'\u20BD0.9M'}
+    ];
+    const activePromos = [
+      {deal:'\u221220%',name:'Natural Yogurt 290g',stores:68,ends:'24 Jun',uplift:'+34%'},
+      {deal:'2+1',name:'Greek Yogurt 450g',stores:54,ends:'30 Jun',uplift:'+18%'},
+      {deal:'\u221215%',name:'Kefir 2.5% 930ml',stores:41,ends:'28 Jun',uplift:'+11%'}
+    ];
+
+    // ---- PRODUCTS ----
+    const stColor = { 'Active':green, 'Moderation':amber, 'Out of stock':red };
+    const stBg = { 'Active':'#e7f6ee', 'Moderation':'#fdf3e2', 'Out of stock':'#fbeaea' };
+    const productsRaw = [
+      {sku:'12345',name:'Greek Yogurt 450g',status:'Active',stores:'77',sales:'\u20BD4.1M'},
+      {sku:'67890',name:'Cottage Cheese 5% 200g',status:'Moderation',stores:'\u2014',sales:'\u2014'},
+      {sku:'12346',name:'Milk 3.2% 1L',status:'Active',stores:'74',sales:'\u20BD2.1M'},
+      {sku:'12347',name:'Natural Yogurt 290g',status:'Active',stores:'68',sales:'\u20BD1.8M'},
+      {sku:'12348',name:'Kefir 2.5% 930ml',status:'Active',stores:'61',sales:'\u20BD1.2M'},
+      {sku:'12349',name:'Butter 82.5% 180g',status:'Active',stores:'55',sales:'\u20BD0.9M'},
+      {sku:'12350',name:'Ryazhenka 4% 450g',status:'Out of stock',stores:'0',sales:'\u2014'},
+      {sku:'12351',name:'Sour Cream 20% 300g',status:'Active',stores:'70',sales:'\u20BD1.5M'}
+    ];
+    const openCard = (p)=>()=>this.setState({ screen:'productcard', cardName:p.name, cardSku:p.sku, cardStatus:p.status, cardSection:'general' });
+    const filteredProducts = productsRaw.filter(p=>st.catFilter==='All'||p.status===st.catFilter).map(p=>({
+      sku:p.sku, name:p.name, status:p.status, stores:p.stores, sales:p.sales,
+      statusColor:stColor[p.status], statusBg:stBg[p.status], onClick:openCard(p)
+    }));
+    const counts = { All:productsRaw.length };
+    productsRaw.forEach(p=>{ counts[p.status]=(counts[p.status]||0)+1; });
+    const setCat = (k)=>()=>this.setState({ catFilter:k });
+    const catChips = ['All','Active','Moderation','Out of stock'].map(k=>{
+      const a = st.catFilter===k;
+      return { label:k, count:counts[k]||0, onClick:setCat(k),
+        style:'border:1px solid '+(a?'var(--accent)':'#e4e4e4')+';background:'+(a?'var(--accent-bg)':'#fff')+';color:'+(a?'var(--accent)':'#5c5c5c')+';font-size:12.5px;font-weight:'+(a?'600':'500')+';padding:7px 13px;border-radius:8px;cursor:pointer;' };
+    });
+
+    // ---- PRODUCT CARD ----
+    const cardStatus = st.cardStatus || 'Active';
+    const setSec = (k)=>()=>this.setState({ cardSection:k });
+    const cardNav = [['general','General'],['media','Media'],['logistics','Logistics'],['regulatory','Regulatory'],['pricing','Pricing'],['availability','Availability']].map(p=>{
+      const a = st.cardSection===p[0];
+      return { label:p[1], onClick:setSec(p[0]),
+        style:'border:none;background:'+(a?'var(--accent-bg)':'transparent')+';color:'+(a?'var(--accent)':'#4a4a4a')+';font-size:13px;font-weight:'+(a?'600':'500')+';padding:10px 13px;border-radius:8px;cursor:pointer;text-align:left;width:100%;' };
+    });
+
+    // ---- DOCUMENTS ----
+    const docStatusColor = { Signed:green, Valid:green, Active:green, Accepted:green, Sent:'#5c5c5c', Pending:amber, Expiring:amber };
+    const docStatusBg = { Signed:'#e7f6ee', Valid:'#e7f6ee', Active:'#e7f6ee', Accepted:'#e7f6ee', Sent:'#f2f2f2', Pending:'#fdf3e2', Expiring:'#fdf3e2' };
+    const tagColors = { UPD:'#5c5c5c', Invoices:'#7c3aed', Orders:'#13a08a', Certificates:'#1f9d57', Contracts:'#c77d11' };
+    const docsRaw = [
+      {name:'UPD #3812',tag:'UPD',type:'UPD',status:'Signed',date:'12 May'},
+      {name:'Invoice #928',tag:'INV',type:'Invoices',status:'Pending',date:'10 May'},
+      {name:'Order #32514810887',tag:'ORD',type:'Orders',status:'Accepted',date:'09 May'},
+      {name:'Certificate EAC-2241',tag:'CRT',type:'Certificates',status:'Valid',date:'02 May'},
+      {name:'Contract SC-2025-14',tag:'CNT',type:'Contracts',status:'Active',date:'28 Apr'},
+      {name:'ORDRSP #4521',tag:'ORD',type:'Orders',status:'Sent',date:'27 Apr'},
+      {name:'DESADV #4520',tag:'ORD',type:'Orders',status:'Sent',date:'26 Apr'},
+      {name:'Invoice #901',tag:'INV',type:'Invoices',status:'Signed',date:'20 Apr'},
+      {name:'Certificate EAC-2189',tag:'CRT',type:'Certificates',status:'Expiring',date:'15 Apr'}
+    ];
+    const setDocTab = (k)=>()=>this.setState({ docTab:k });
+    const docTabsDef = ['All','Orders','Invoices','UPD','Certificates','Contracts','Archive'];
+    const docTabs = docTabsDef.map(k=>{
+      const a = st.docTab===k;
+      return { label:k, onClick:setDocTab(k),
+        style:'border:none;background:transparent;border-bottom:2px solid '+(a?'var(--accent)':'transparent')+';color:'+(a?'var(--accent)':'#5c5c5c')+';font-size:13px;font-weight:'+(a?'600':'500')+';padding:11px 14px;cursor:pointer;margin-bottom:-1px;' };
+    });
+    const filteredDocs = docsRaw.filter(d=> st.docTab==='All' ? true : (st.docTab==='Archive' ? false : d.type===st.docTab)).map(d=>({
+      name:d.name, tag:d.tag, type:d.type, status:d.status, date:d.date,
+      tagColor:tagColors[d.type]||'#5c5c5c', statusColor:docStatusColor[d.status]||'#5c5c5c', statusBg:docStatusBg[d.status]||'#f2f2f2'
+    }));
+
+    // ---- ANALYTICS ----
+    const analyticsMetrics = [
+      {label:'Revenue (30d)',value:'\u20BD18.4M',delta:'\u25B2 12.3%'},
+      {label:'Units sold (30d)',value:'312k',delta:'\u25B2 8.1%'},
+      {label:'Average price',value:'\u20BD59',delta:'\u25B2 3.2%'}
+    ];
+    const barVals = series.year;
+    const barMax = Math.max.apply(null,barVals);
+    const analyticsBars = barVals.map((v,i)=>({
+      h: Math.round(v/barMax*150)+10 + 'px',
+      fill: i===barVals.length-1 ? 'var(--accent)' : 'var(--accent-bg)',
+      label: labelSets.year[i]
+    }));
+    const regions = [
+      {name:'Moscow region',pct:96},{name:'Saint Petersburg',pct:91},{name:'Krasnodar',pct:78},{name:'Novosibirsk',pct:64},{name:'Yekaterinburg',pct:52}
+    ];
+    const promoEff = [
+      {deal:'\u221220%',period:'2 weeks',uplift:'+34%'},
+      {deal:'1+1',period:'1 week',uplift:'+22%'},
+      {deal:'2+1',period:'2 weeks',uplift:'+18%'},
+      {deal:'\u221215%',period:'10 days',uplift:'+11%'}
+    ];
+
+    // ---- A/B FLOW + TESTS ----
+    const abFlow = [
+      {n:'1',title:'Hypothesis',desc:'Supplier proposes a test idea',dot:'var(--accent)',dotText:'#fff',connector:true},
+      {n:'2',title:'CM approval',desc:'O\u2019KEY category manager reviews',dot:'var(--accent)',dotText:'#fff',connector:true},
+      {n:'3',title:'One Retail runs it',desc:'System splits traffic & collects data',dot:'var(--accent)',dotText:'#fff',connector:true},
+      {n:'4',title:'Results',desc:'Supplier sees the winning variant',dot:'#e7f6ee',dotText:'#1f9d57',connector:false}
+    ];
+    const abTests = [
+      {name:'Main image A/B',type:'Image',status:'Running',timeline:'2 days left',color:'#5c5c5c',bg:'#f2f2f2'},
+      {name:'Product title',type:'Title',status:'Completed',timeline:'Variant B won',color:'#1f9d57',bg:'#e7f6ee'},
+      {name:'Promo badge color',type:'Badge',status:'Running',timeline:'4 days left',color:'#5c5c5c',bg:'#f2f2f2'},
+      {name:'Description length',type:'Content',status:'Draft',timeline:'\u2014',color:'#8a8a8a',bg:'#f2f2f2'}
+    ];
+
+    // ---- ORDERS ----
+    const orderTimeline = [
+      {label:'Order created',time:'09 May 11:42',state:'done'},
+      {label:'Accepted',time:'09 May 11:58',state:'current'},
+      {label:'Shipped',time:'\u2014',state:'todo'},
+      {label:'Received',time:'\u2014',state:'todo'},
+      {label:'Closed',time:'\u2014',state:'todo'}
+    ].map((s,i,arr)=>{
+      const done = s.state==='done', cur = s.state==='current';
+      return {
+        label:s.label, time:s.time, connector:i<arr.length-1,
+        dot: done?'var(--accent)':(cur?'#fff':'#fff'),
+        border: done?'none':(cur?'3px solid var(--accent)':'2px solid #dcdcdc'),
+        inner: done?'#fff':(cur?'var(--accent)':'transparent'),
+        line: (done||cur)?'var(--accent)':'#e8e8e8',
+        weight: cur?'600':'500',
+        textColor: (done||cur)?'#1c1c1c':'#9a9a9a'
+      };
+    });
+    const ordersList = [
+      {id:'#32514810887',dc:'DC Moscow-North',date:'09 May',amount:'\u20BD1,243,800',status:'Accepted',color:green,bg:'#e7f6ee'},
+      {id:'#32514810712',dc:'DC Saint Petersburg',date:'06 May',amount:'\u20BD884,200',status:'Shipped',color:'#5c5c5c',bg:'#f2f2f2'},
+      {id:'#32514809980',dc:'DC Krasnodar',date:'03 May',amount:'\u20BD512,640',status:'Closed',color:'#5c5c5c',bg:'#f2f2f2'},
+      {id:'#32514809541',dc:'DC Moscow-North',date:'29 Apr',amount:'\u20BD1,002,300',status:'Closed',color:'#5c5c5c',bg:'#f2f2f2'},
+      {id:'#32514809102',dc:'DC Yekaterinburg',date:'25 Apr',amount:'\u20BD367,910',status:'Closed',color:'#5c5c5c',bg:'#f2f2f2'}
+    ];
+
+    // ---- NOTIFICATIONS ----
+    const typeStyle = {
+      success:{c:'#1f9d57',bg:'#e7f6ee',g:'\u2713'},
+      warning:{c:'#c77d11',bg:'#fdf3e2',g:'!'},
+      info:{c:'#5c5c5c',bg:'#f2f2f2',g:'i'},
+      error:{c:'#d23b3b',bg:'#fbeaea',g:'\u2715'}
+    };
+    const notifsRaw = [
+      {type:'success',cat:'Products',title:'Product approved',desc:'Greek Yogurt 450g passed moderation and is now live in 77 stores.',time:'2h ago',unread:true},
+      {type:'warning',cat:'Documents',title:'Certificate expires in 30 days',desc:'EAC declaration EAC-2189 for Butter 82.5% expires on 18 Jul 2026.',time:'5h ago',unread:true},
+      {type:'info',cat:'Orders',title:'New order received',desc:'Order #32514810887 from DC Moscow-North \u00B7 \u20BD1.24M \u00B7 8,420 units.',time:'Today',unread:true},
+      {type:'info',cat:'Products',title:'Promotion started',desc:'Promo \u221220% on Natural Yogurt 290g is now active in 68 stores.',time:'Yesterday',unread:false},
+      {type:'error',cat:'Products',title:'Product out of stock',desc:'Ryazhenka 4% 450g is out of stock across all stores.',time:'Yesterday',unread:true},
+      {type:'success',cat:'Products',title:'A/B test completed',desc:'Product title experiment finished \u2014 Variant B won (+12% CTR).',time:'2 days ago',unread:false}
+    ];
+    const setNotif = (k)=>()=>this.setState({ notifFilter:k });
+    const notifChips = ['All','Unread','Products','Documents','Orders'].map(k=>{
+      const a = st.notifFilter===k;
+      return { label:k, onClick:setNotif(k),
+        style:'border:1px solid '+(a?'var(--accent)':'#e4e4e4')+';background:'+(a?'var(--accent-bg)':'#fff')+';color:'+(a?'var(--accent)':'#5c5c5c')+';font-size:12.5px;font-weight:'+(a?'600':'500')+';padding:7px 14px;border-radius:8px;cursor:pointer;' };
+    });
+    const filteredNotifs = notifsRaw.filter(n=>{
+      if(st.notifFilter==='All') return true;
+      if(st.notifFilter==='Unread') return n.unread;
+      return n.cat===st.notifFilter;
+    }).map(n=>{
+      const t = typeStyle[n.type];
+      return { title:n.title, desc:n.desc, time:n.time, unread:n.unread, color:t.c, bg:t.bg, glyph:t.g, rowBg: n.unread?'rgba(23,99,212,0.025)':'#fff' };
+    });
+    const dashNotifs = notifsRaw.slice(0,4).map(n=>({ title:n.title, time:n.time, color:typeStyle[n.type].c }));
+
+    // ---- PLACEHOLDER ----
+    const placeholderDescs = {
+      promotions:'Plan, submit and track promotional mechanics across O\u2019KEY stores. Approved promos appear on your Dashboard.',
+      deliveries:'Schedule shipments to distribution centers and follow each delivery from dispatch to receipt.',
+      stores:'Browse the 92 O\u2019KEY stores, see which carry your assortment and review per-store performance.',
+      support:'Open a ticket with the O\u2019KEY supplier team, browse the knowledge base, or chat with your category manager.',
+      settings:'Manage company details, banking, EDI connection settings, users and notification preferences.'
+    };
+    const placeholderIconKey = { promotions:'promo', deliveries:'deliveries', stores:'stores', support:'support', settings:'settings' };
+
+    const placeholderSet = { promotions:1, deliveries:1, stores:1, support:1, settings:1 };
+
+    return {
+      navItems:navItems,
+      collapsed: collapsed,
+      sidebarWidth: collapsed?'72px':'250px',
+      showLabels: !collapsed,
+      sideJustify: collapsed?'center':'flex-start',
+      toggleCollapse: ()=>this.setState(s=>({ collapsed:!s.collapsed })),
+      screenTitle: titles[st.screen] || 'Dashboard',
+      goNotifications: set('notifications'),
+      goSettings: set('settings'),
+      goPromotions: set('promotions'),
+      goCatalog: set('catalog'),
+      openNewCard: ()=>this.setState({ screen:'productcard', cardName:'New product', cardSku:'\u2014', cardStatus:'Draft', cardSection:'general' }),
+      stop: (e)=>{ if(e&&e.stopPropagation) e.stopPropagation(); },
+
+      isDashboard: st.screen==='dashboard',
+      isCatalog: st.screen==='catalog',
+      isCard: st.screen==='productcard',
+      isDocuments: st.screen==='documents',
+      isAnalytics: st.screen==='analytics',
+      isAbtests: st.screen==='abtests',
+      isOrders: st.screen==='orders',
+      isNotifications: st.screen==='notifications',
+      isPlaceholder: !!placeholderSet[st.screen],
+
+      showDeltas: this.props.showKpiDeltas !== false,
+      kpis:kpis,
+      chartLine:chart.line, chartArea:chart.area, chartLabels:labelSets[st.salesRange], rangeBtns:rangeBtns,
+      topProductsDash:topProductsDash, activePromos:activePromos, dashNotifs:dashNotifs,
+
+      filteredProducts:filteredProducts, catChips:catChips,
+
+      cardName:st.cardName, cardSku:st.cardSku, cardStatus:cardStatus,
+      cardStatusColor: stColor[cardStatus]||'#5c5c5c', cardStatusBg: stBg[cardStatus]||'#f2f2f2',
+      cardNav:cardNav,
+      secGeneral: st.cardSection==='general', secMedia: st.cardSection==='media', secLogistics: st.cardSection==='logistics',
+      secRegulatory: st.cardSection==='regulatory', secPricing: st.cardSection==='pricing', secAvailability: st.cardSection==='availability',
+      mediaSlots:['front pack','back label','lifestyle','packaging'],
+      regionChips:['Moscow region','Saint Petersburg','Krasnodar','Novosibirsk','Yekaterinburg','Kazan'],
+
+      docTabs:docTabs, filteredDocs:filteredDocs, docsEmpty: filteredDocs.length===0,
+
+      analyticsMetrics:analyticsMetrics, analyticsBars:analyticsBars, regions:regions, promoEff:promoEff,
+
+      abFlow:abFlow, abTests:abTests,
+
+      orderTimeline:orderTimeline, ordersList:ordersList,
+
+      notifChips:notifChips, filteredNotifs:filteredNotifs,
+
+      placeholderDesc: placeholderDescs[st.screen] || '', placeholderIcon: this.icon(placeholderIconKey[st.screen]||'dashboard')
+    };
+  }
+}
+</script>
+<script>
+(async () => {
+  if (!document.title || !document.title.trim()) document.title = "O'KEY Supplier Portal";
+  // Prepend so page-supplied @page / break rules (deck-stage's margin:0,
+  // author CSS) keep source-order precedence over the baseline.
+  const baseCss = document.createElement('style');
+  baseCss.textContent = "@media print {\n  @page { margin: 0.5cm; }\n  figure, table { break-inside: avoid; }\n  *, *::before, *::after {\n    print-color-adjust: exact; -webkit-print-color-adjust: exact;\n    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;\n    animation-delay: -99s !important; animation-duration: .001s !important;\n    animation-iteration-count: 1 !important; animation-fill-mode: both !important;\n    animation-play-state: running !important; transition-duration: 0s !important;\n  }\n}";
+  document.head.prepend(baseCss);
+  if (document.readyState === 'loading') {
+    await new Promise((r) => document.addEventListener('DOMContentLoaded', r, { once: true }));
+  }
+  let ds = document.querySelector('deck-stage');
+  // whenDefined never resolves when nothing registers the element, so only
+  // await it when a <deck-stage> tag exists (and race a timeout regardless).
+  if (ds && !customElements.get('deck-stage')) {
+    try {
+      await Promise.race([
+        customElements.whenDefined('deck-stage'),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
+    } catch (e) {}
+    ds = document.querySelector('deck-stage');
+  }
+  // dc-runtime assigns window.DCLogic at init and mounts into #dc-root on
+  // DOMContentLoaded; settle on that subtree so React has rendered before
+  // print(). Non-DC pages fall through to weighing body.
+  const isDc = !ds && 'DCLogic' in window;
+  const settleRoot = ds || (isDc ? document.getElementById('dc-root') : null) || document.body;
+  if (settleRoot) {
+    // Weigh only content children — skip script/style/template so inline
+    // Babel/CSS doesn't register as stable "content" before the framework
+    // has mounted anything.
+    const MEDIA = 'img,svg,canvas,video,picture,iframe,embed,object';
+    const weigh = () => {
+      let text = 0, media = 0;
+      for (const c of settleRoot.children) {
+        const t = c.tagName;
+        if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+        text += (c.textContent || '').trim().length;
+        media += c.querySelectorAll(MEDIA).length + (c.matches(MEDIA) ? 1 : 0);
+      }
+      return text + media * 100;
+    };
+    // "Non-zero and stable" alone is not sufficient to mean rendered: generic
+    // body can carry a static shell while async main content is pending, and
+    // #dc-root can carry the root DC's static text while child refs are still
+    // .sc-placeholder boxes. Gate generic on readyState 'complete', and never
+    // accept stability while a dc-runtime placeholder is present.
+    const isGeneric = settleRoot === document.body;
+    const deadline = Date.now() + 15000;
+    let last = -1, stable = 0;
+    while (Date.now() < deadline) {
+      const n = weigh();
+      const ready =
+        (!isGeneric || document.readyState === 'complete') &&
+        !settleRoot.querySelector('.sc-placeholder');
+      if (n > 0 && n === last && ready) { if (++stable >= 2) break; } else { stable = 0; }
+      last = n;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  // Reveal content gated on scroll or visibility before printing. Lazy <img>,
+  // IntersectionObserver fade-ins, and collapsed <details> don't render while
+  // off-screen, so a long page would print with them blank or closed. Open
+  // every <details>, force native-lazy images eager, and scroll the document
+  // through its full height to trip lazy-load + IO; then wait (bounded) for the
+  // newly-triggered images. Inert for deck-stage (slides aren't scroll-gated).
+  try {
+    for (const d of document.querySelectorAll('details')) d.open = true;
+    for (const img of document.querySelectorAll('img[loading="lazy"]'))
+      img.loading = 'eager';
+    const scroller = document.scrollingElement || document.documentElement;
+    const full = Math.max(scroller.scrollHeight, document.body.scrollHeight);
+    const step = window.innerHeight || 800;
+    for (let y = 0; y <= full; y += step) {
+      window.scrollTo(0, y);
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+    window.scrollTo(0, 0);
+    await Promise.race([
+      Promise.all(
+        [...document.images].map((img) =>
+          img.complete
+            ? null
+            : new Promise((res) => {
+                img.addEventListener('load', res, { once: true });
+                img.addEventListener('error', res, { once: true });
+              })
+        )
+      ),
+      new Promise((r) => setTimeout(r, 4000)),
+    ]);
+  } catch (e) {}
+  try { await document.fonts.ready; } catch (e) {}
+  // Jump every animation to its end state so print() never captures a slide
+  // mid-entrance. Ordering matters: the 0s-transition style must be live
+  // BEFORE data-deck-active is set so attribute-keyed transitions don't
+  // start a (now-0s) run from the pre-active base.
+  const st = document.createElement('style');
+  st.textContent = '*,*::before,*::after{animation-delay:-99s !important;animation-duration:.001s !important;animation-iteration-count:1 !important;animation-fill-mode:both !important;animation-play-state:running !important;transition-duration:0s !important}';
+  document.head.appendChild(st);
+  for (const d of document.querySelectorAll('deck-stage')) {
+    for (const c of d.children) {
+      const t = c.tagName;
+      if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+      c.setAttribute('data-deck-active', '');
+    }
+  }
+  // Re-append deck-stage's @page last so no author @page can add a margin and
+  // spill each full-bleed slide onto two sheets. Backstop for old copies.
+  if (ds) {
+    let pg = document.getElementById('deck-stage-print-page');
+    if (!pg) {
+      pg = document.createElement('style');
+      pg.textContent = '@page{size:' + (+ds.getAttribute('width') || 1920) +
+        'px ' + (+ds.getAttribute('height') || 1080) + 'px;margin:0}';
+    }
+    document.body.appendChild(pg);
+  }
+  try {
+    const sweep = () => {
+      for (const a of document.getAnimations()) {
+        try { a.finish(); } catch (e) {
+          try { a.currentTime = (a.effect && a.effect.getComputedTiming().duration) || 0; a.pause(); } catch (e2) {}
+        }
+      }
+    };
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+  } catch (e) {}
+  // Relax break-inside on oversized elements. An element taller than a
+  // printable page can't honor break-inside: avoid — browsers either overflow
+  // it or push it whole to the next page, leaving a blank gap, then break it
+  // anyway at an arbitrary point. After the final layout (content revealed,
+  // animations jumped), find elements taller than a page that still compute
+  // break-inside: avoid and reset them to auto, so the browser breaks them at
+  // their children's boundaries instead (children keep their own avoid). PAGE_PX
+  // is a conservative portrait estimate at 96 CSS px/in — Letter/A4 usable
+  // height minus our 0.5in margins — so only clearly-oversized elements are
+  // touched and under-page elements still stay whole. Skipped for decks, whose
+  // slides are sized to the page.
+  try {
+    if (!document.querySelector('deck-stage')) {
+      const PAGE_PX = 1024;
+      // Our print defaults add a body padding inset only when we also zero the
+      // @page margin; computed style can't tell us (it reports screen media),
+      // so read the injected rule directly.
+      const defaults = document.querySelector('style[data-omelette-print-defaults]');
+      const pageInset = /body\s*\{[^}]*padding/.test(defaults ? defaults.textContent || '' : '');
+      const SEL = 'section,article,figure,table,pre,blockquote,[class~="card" i],[class~="page" i],[class~="sheet" i]';
+      for (const el of document.body.querySelectorAll(SEL)) {
+        if (el instanceof HTMLElement && el.offsetHeight > PAGE_PX) {
+          el.setAttribute('data-om-oversized', '');
+          // Fake-paged docs simulate sheets with over-tall break-after:page
+          // boxes; honoring the break spills half-blank pages and ends a
+          // colored box mid-sheet. Flow them, and (only when we own the page
+          // inset) drop the redundant padding/background via the rule below.
+          const cs = getComputedStyle(el);
+          if (cs.breakAfter === 'page' || cs.pageBreakAfter === 'always') {
+            el.setAttribute('data-om-fakepage', '');
+          }
+        }
+      }
+      const ost = document.createElement('style');
+      ost.textContent = '@media print{' +
+        '[data-om-oversized]{break-inside:auto !important;page-break-inside:auto !important}' +
+        '[data-om-fakepage]{break-after:auto !important;page-break-after:auto !important}' +
+        (pageInset ? '[data-om-fakepage]{padding:0 !important;background:none !important}' : '') +
+        '}';
+      document.head.appendChild(ost);
+    }
+  } catch (e) {}
+  // macOS Preview renders Skia-PDF Luminosity soft-masks as opaque grey boxes;
+  // swap the CSS that triggers them for Preview-safe forms.
+  try {
+    for (const el of document.body.querySelectorAll('*')) {
+      const cs = getComputedStyle(el);
+
+      if (cs.boxShadow !== 'none' && cs.filter === 'none') {
+        const outs = [], kept = [];
+        for (const s of cs.boxShadow.split(/,(?![^(]*[)])/)) {
+          const t = s.trim();
+          const m = t.match(/^(rgba?[(][^)]+[)]) (-?[0-9.]+px) (-?[0-9.]+px) ([0-9.]+px) -?[0-9.]+px$/);
+          if (m && parseFloat(m[4]) > 0) outs.push('drop-shadow(' + m[2] + ' ' + m[3] + ' ' + m[4] + ' ' + m[1] + ')');
+          else kept.push(t);
+        }
+        if (outs.length) {
+          el.style.setProperty('filter', outs.join(' '), 'important');
+          el.style.setProperty('box-shadow', kept.join(', ') || 'none', 'important');
+        }
+      }
+
+      const mask = cs.maskImage && cs.maskImage !== 'none' ? cs.maskImage : cs.webkitMaskImage;
+      if (mask && mask !== 'none' && cs.filter === 'none') el.style.setProperty('filter', 'opacity(1)', 'important');
+    }
+  } catch (e) {}
+  setTimeout(() => { try { window.print(); } catch (e) {} }, 200);
+})();
+</script>
+</body>
+</html>
