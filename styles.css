@@ -180,6 +180,18 @@ a { text-decoration: none; color: inherit; }
 .notif-unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: none; margin-top: 6px; }
 .notif-pip { position: absolute; top: 8px; right: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 
+/* ── Upload slots ── */
+.upload-slot { cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #9ca3af; transition: border-color .15s, background .15s; }
+.upload-slot:hover { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
+
+/* ── Selectable region chip ── */
+.region-chip.selectable { cursor: pointer; transition: background .12s, border-color .12s, color .12s; }
+.region-chip.selectable:hover { border-color: var(--accent); color: var(--accent); }
+.region-chip.selected { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+
+/* ── Section completion dot ── */
+.sec-dot { width: 7px; height: 7px; border-radius: 50%; background: #1f9d57; display: inline-block; flex: none; }
+
 /* ── Orders timeline ── */
 .timeline { display: flex; align-items: flex-start; }
 .tl-step { flex: 1; display: flex; align-items: flex-start; }
